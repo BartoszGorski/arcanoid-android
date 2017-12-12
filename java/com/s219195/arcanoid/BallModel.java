@@ -1,60 +1,82 @@
 package com.s219195.arcanoid;
 
-import android.graphics.Point;
-
 public class BallModel {
-    private final int M_RADIUS = 12;
-    private float xPos = M_RADIUS + 100.0f;
-    private float yPos = M_RADIUS + 600.0f;
-    private float mVelocityX = 1.2f;
-    private float mVelocityY = 1.2f;
+    private int mRadius = 12;
+    private float xPosition = mRadius + 100.0f;
+    private float yPosition = mRadius + 600.0f;
+    private float mVelocityX = 0.0f;
+    private float mVelocityY = 0.0f;
+    private int mWindowWidth;
+    private int mWindowHeight;
 
     private final float BOUNCE_STRENGTH = 1f;
 
-    BallModel() {}
+    BallModel(float xPosition, float yPosition, int radius, int windowWidth, int windowHeight) {
 
-    void setPosition(Painter aPainter) {
-
-        xPos += mVelocityX;
-        yPos += mVelocityY;
-
-        if (xPos - M_RADIUS <= 0) {
-            xPos = 1 + M_RADIUS;
-            mVelocityX *= -BOUNCE_STRENGTH;
-        }
-        if (xPos + M_RADIUS >= aPainter.getWidth()) {
-            xPos = aPainter.getWidth() - 1 - M_RADIUS;
-            mVelocityX *= -BOUNCE_STRENGTH;
-        }
-
-        if (yPos - M_RADIUS <= 0) {
-            yPos = 1 + M_RADIUS;
-            mVelocityY *= -BOUNCE_STRENGTH;
-        }
-        if (yPos + M_RADIUS >= aPainter.getHeight()) {
-            yPos = aPainter.getHeight() - 1 - M_RADIUS;
-            mVelocityY *= -BOUNCE_STRENGTH;
-        }
+        this.xPosition = xPosition;
+        this.yPosition = yPosition;
+        mRadius = radius;
+        mWindowWidth = windowWidth;
+        mWindowHeight = windowHeight;
     }
 
-    public boolean isIntersectingWithRectangle(FieldModel fieldModel) {
+    boolean updatePosition() {
+
+        xPosition += mVelocityX;
+        yPosition += mVelocityY;
+
+        return (yPosition - mRadius < mWindowHeight);
+    }
+
+    public boolean checkIntersections(FieldModel aFieldModel) {
+
+        if (isIntersectiongWithWalls()) {
+            return true;
+        }
+        if (isIntersectingWithRectangle(aFieldModel)) {
+            return true;
+        }
+        return false;
+    }
+
+    private boolean isIntersectiongWithWalls() {
+        if (xPosition - mRadius <= 0) {
+            xPosition = 1 + mRadius;
+            mVelocityX *= -BOUNCE_STRENGTH;
+            return true;
+        }
+        if (xPosition + mRadius >= mWindowWidth) {
+            xPosition = mWindowWidth - 1 - mRadius;
+            mVelocityX *= -BOUNCE_STRENGTH;
+            return true;
+        }
+
+        if (yPosition - mRadius <= 0) {
+            yPosition = 1 + mRadius;
+            mVelocityY *= -BOUNCE_STRENGTH;
+            return true;
+        }
+        return false;
+    }
+
+    private boolean isIntersectingWithRectangle(FieldModel fieldModel) {
 
         int leftRect = fieldModel.getPosition().x;
         int topRect = fieldModel.getPosition().y;
         int rectWidth = fieldModel.getWidth();
         int rectHeight = fieldModel.getHeight();
 
-        int circleDistanceX = Math.abs((int) (xPos + mVelocityX) - (leftRect + rectWidth / 2));
-        int circleDistanceY = Math.abs((int) (yPos + mVelocityY) - (topRect + rectHeight / 2));
+        int circleDistanceX = Math.abs((int) (xPosition + mVelocityX) - (leftRect + rectWidth / 2));
+        int circleDistanceY = Math.abs((int) (yPosition + mVelocityY) - (topRect + rectHeight / 2));
 
-        if (circleDistanceX >= M_RADIUS + rectWidth || circleDistanceY >= M_RADIUS + rectHeight ) {
+        if (circleDistanceX >= mRadius + rectWidth || circleDistanceY >= mRadius + rectHeight) {
             return false;
         }
 
-        if (circleDistanceX > (rectWidth / 2 + M_RADIUS)) {
+        if (circleDistanceX > (rectWidth / 2 + mRadius)) {
             return false;
         }
-        if (circleDistanceY > (rectHeight / 2 + M_RADIUS)) {
+        if (circleDistanceY > (rectHeight / 2 + mRadius)) {
             return false;
         }
 
@@ -68,7 +90,7 @@ public class BallModel {
         }
 
         float cornerDistance_sq = (circleDistanceX - rectWidth / 2) ^ 2 + (circleDistanceY - rectHeight / 2) ^ 2;
-        if (cornerDistance_sq <= (M_RADIUS ^ 2)) {
+        if (cornerDistance_sq <= (mRadius ^ 2)) {
             mVelocityY *= -BOUNCE_STRENGTH;
             mVelocityX *= -BOUNCE_STRENGTH;
             return true;
@@ -76,16 +98,16 @@ public class BallModel {
         return false;
     }
 
-    public float getxPos() {
-        return xPos;
+    public float getxPosition() {
+        return xPosition;
     }
 
-    public float getyPos() {
-        return yPos;
+    public float getyPosition() {
+        return yPosition;
     }
 
     float getRadius() {
-        return M_RADIUS;
+        return mRadius;
     }
 
     public void speedUp(float aSpeedUp) {

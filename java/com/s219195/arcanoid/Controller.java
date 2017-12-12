@@ -2,32 +2,41 @@ package com.s219195.arcanoid;
 
 import android.graphics.Point;
 import android.os.Handler;
-import android.util.Log;
 import android.widget.TextView;
-
 import java.util.Iterator;
 import java.util.List;
-import java.util.TreeMap;
 
 class Controller implements Runnable {
-    long startTime = System.currentTimeMillis();
-    long time = 0;
+    private long startTime = System.currentTimeMillis();
+    private long time = 0;
     private Handler mHandler;
-    private float mX = 0.0f, mY = 0.0f;
+    private float mX = 0.0f;
     private GameManager mGameManager;
     private Painter mPainter;
     private BallModel mBallModel;
     private PlayerPlatform mPlayerPlatform;
     private FieldMap mFieldMap;
-    private TextView mTextView;
+    private TextView mBestScoreTextView;
+    private TextView mScoreTextView;
 
-    public Controller(Handler aHandler, Painter aPainter, TextView aTextView, Point defaultWindowSize) {
+    public Controller(Handler aHandler, Painter aPainter, TextView aScoreTextView,
+                      TextView aBestScoreTextView, Point defaultWindowSize) {
         mHandler = aHandler;
         mPainter = aPainter;
-        mTextView = aTextView;
+        mScoreTextView = aScoreTextView;
+        mBestScoreTextView = aBestScoreTextView;
 
         mGameManager = new GameManager(10000, 3000, 400);
-        mBallModel = new BallModel();
+
+        mScoreTextView.setText("Score: " + mGameManager.getScore());
+        mBestScoreTextView.setText("Best Score: " + 1234);
+        mBallModel = new BallModel(
+                defaultWindowSize.x / 2,
+                defaultWindowSize.y - 100 - 12 - 1,
+                12,
+                defaultWindowSize.x,
+                defaultWindowSize.y
+        );
         mPlayerPlatform = new PlayerPlatform(
                 140, 30,
                 new Point(defaultWindowSize.x / 2, defaultWindowSize.y - 100)
@@ -41,16 +50,16 @@ class Controller implements Runnable {
     }
 
     private boolean checkIntersections() {
-        if (mBallModel.isIntersectingWithRectangle(mPlayerPlatform)) {
+        if (mBallModel.checkIntersections(mPlayerPlatform)) {
             return true;
         }
 
         List<FieldModel> fieldModels = mFieldMap.getFieldModels();
         for (Iterator<FieldModel> iterator = fieldModels.iterator(); iterator.hasNext(); ) {
             FieldModel fieldModel = iterator.next();
-            if (mBallModel.isIntersectingWithRectangle(fieldModel)) {
+            if (mBallModel.checkIntersections(fieldModel)) {
                 iterator.remove();
-                mGameManager.addPoints(PointsValue.SCORE_FIELD.getValue());
+                mGameManager.addPoints(PointsValue.SCORE_FIELD.getValue(), mScoreTextView);
                 return true;
             }
         }
@@ -78,16 +87,18 @@ class Controller implements Runnable {
 
     private void Update() {
         if (checkTime()) {
-            mGameManager.addPoints(PointsValue.SCORE_SPAWNED_ROW.getValue());
+            mGameManager.addPoints(PointsValue.SCORE_SPAWNED_ROW.getValue(), mScoreTextView);
             mGameManager.changeTimeToSpawnNextRow();
-            if(!mFieldMap.spawnNextRow()) {
+            if (!mFieldMap.spawnNextRow()) {
                 mGameManager.gameOver();
             }
             mBallModel.speedUp(0.3f);
         }
         mPlayerPlatform.setPosition(mX, mPainter);
         checkIntersections();
-        mBallModel.setPosition(mPainter);
+        if (!mBallModel.updatePosition()) {
+            mGameManager.gameOver();
+        }
     }
 
     private void Render() {
@@ -103,8 +114,7 @@ class Controller implements Runnable {
         return false;
     }
 
-    public void setPhoneRotation(float x, float y) {
+    public void setPhoneRotation(float x) {
         mX = x;
-        mY = y;
     }
 }

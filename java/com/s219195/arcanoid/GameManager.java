@@ -1,5 +1,7 @@
 package com.s219195.arcanoid;
 
+import android.widget.TextView;
+
 enum PointsValue {
     SCORE_FIELD(1),
     SCORE_SPAWNED_ROW(3);
@@ -27,8 +29,9 @@ public class GameManager {
         mTimeSubtractionValue = aTimeSubtractionValue;
     }
 
-    public void addPoints(int aPoints) {
+    public void addPoints(int aPoints, TextView aScoreTextView) {
         mScore += aPoints;
+        aScoreTextView.setText("Score: " + mScore);
     }
 
     public float getTimeToSpawnNextRow() {
@@ -47,5 +50,9 @@ public class GameManager {
         //TODO menu layout
         //TODO show score
         return;
+    }
+
+    public int getScore() {
+        return mScore;
     }
 }

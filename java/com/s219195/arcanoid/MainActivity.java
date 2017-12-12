@@ -1,8 +1,6 @@
 package com.s219195.arcanoid;
 
-import android.annotation.SuppressLint;
 import android.content.Context;
-import android.content.pm.ActivityInfo;
 import android.graphics.Point;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
@@ -27,14 +25,17 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LOW_PROFILE
+        getWindow().getDecorView().setSystemUiVisibility(
+                View.SYSTEM_UI_FLAG_LOW_PROFILE
                 | View.SYSTEM_UI_FLAG_FULLSCREEN
                 | View.SYSTEM_UI_FLAG_LAYOUT_STABLE
                 | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
                 | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
-                | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION);
+                | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
+        );
 
-        TextView textView = (TextView) findViewById(R.id.textView);
+        TextView bestScoreTextView = (TextView) findViewById(R.id.bestScoreTextView);
+        TextView scoreTextView = (TextView) findViewById(R.id.scoreTextView);
         Painter painter = (Painter) findViewById(R.id.painter);
 
         mSensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
@@ -45,22 +46,19 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
             Display display = getWindowManager().getDefaultDisplay();
             Point size = new Point();
             display.getSize(size);
-            mController = new Controller(new Handler(), painter, textView, size);
+            mController = new Controller(new Handler(), painter, scoreTextView, bestScoreTextView, size);
             Thread t = new Thread(mController);
             t.start();
         }
         else
         {
-            textView.setText("Sorry, there are no accelerometers on your device.");
+            scoreTextView.setText("Sorry, there are no accelerometers on your device.");
         }
     }
 
     public void onSensorChanged(SensorEvent event) {
-
         float x = event.values[0];
-        float y = event.values[1];
-
-        mController.setPhoneRotation(x, y);
+        mController.setPhoneRotation(x);
     }
 
     @Override

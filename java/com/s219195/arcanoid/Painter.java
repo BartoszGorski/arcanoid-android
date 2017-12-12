@@ -37,8 +37,8 @@ public class Painter extends View {
         super.onDraw(canvas);
 
         canvas.drawCircle(
-                (int)mBallModel.getxPos(),
-                (int)mBallModel.getyPos(),
+                (int)mBallModel.getxPosition(),
+                (int)mBallModel.getyPosition(),
                 mBallModel.getRadius(),
                 mPaintBall
         );
