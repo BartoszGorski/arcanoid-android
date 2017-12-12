@@ -3,6 +3,7 @@ package com.s219195.arcanoid;
 import android.graphics.Point;
 import android.os.Handler;
 import android.widget.TextView;
+
 import java.util.Iterator;
 import java.util.List;
 
@@ -86,13 +87,21 @@ class Controller implements Runnable {
     }
 
     private void Update() {
-        if (checkTime()) {
-            mGameManager.addPoints(PointsValue.SCORE_SPAWNED_ROW.getValue(), mScoreTextView);
-            mGameManager.changeTimeToSpawnNextRow();
-            if (!mFieldMap.spawnNextRow()) {
-                mGameManager.gameOver();
+        if (mBallModel.isBallReleased()) {
+            if (checkTime()) {
+                mGameManager.addPoints(PointsValue.SCORE_SPAWNED_ROW.getValue(), mScoreTextView);
+                mGameManager.changeTimeToSpawnNextRow();
+                if (!mFieldMap.spawnNextRow()) {
+                    mGameManager.gameOver();
+                }
+                mBallModel.speedUp(0.3f);
             }
-            mBallModel.speedUp(0.3f);
+        } else {
+            time = System.currentTimeMillis() - startTime;
+            if (time >= mGameManager.getDelayToStartGame()) {
+                startTime = System.currentTimeMillis();
+                mBallModel.releaseBall();
+            }
         }
         mPlayerPlatform.setPosition(mX, mPainter);
         checkIntersections();

@@ -1,6 +1,8 @@
 package com.s219195.arcanoid;
 
 public class BallModel {
+    private final float BOUNCE_STRENGTH = 1f;
+
     private int mRadius = 12;
     private float xPosition = mRadius + 100.0f;
     private float yPosition = mRadius + 600.0f;
@@ -8,8 +10,7 @@ public class BallModel {
     private float mVelocityY = 0.0f;
     private int mWindowWidth;
     private int mWindowHeight;
-
-    private final float BOUNCE_STRENGTH = 1f;
+    private boolean isReleased = false;
 
     BallModel(float xPosition, float yPosition, int radius, int windowWidth, int windowHeight) {
 
@@ -113,5 +114,20 @@ public class BallModel {
     public void speedUp(float aSpeedUp) {
         mVelocityX += aSpeedUp;
         mVelocityY += aSpeedUp;
+    }
+
+    public void releaseBall() {
+        int direction = (int) (Math.random() * 2);
+        if(direction == 0)
+            direction = -1;
+
+        mVelocityX = 1.5f * direction;
+        mVelocityY = -2.6f;
+
+        isReleased = true;
+    }
+
+    public boolean isBallReleased() {
+        return isReleased;
     }
 }

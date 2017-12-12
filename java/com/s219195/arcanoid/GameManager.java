@@ -22,6 +22,7 @@ public class GameManager {
     private int mStartTimeToSpawnNextRow;
     private int mMinTimeToSpawnNextRow;
     private int mTimeSubtractionValue;
+    private int delayToStartGame = 3000;
 
     GameManager(int aStartTimeToSpawnNextRow, int aMinTimeToSpawnNextRow, int aTimeSubtractionValue) {
         mStartTimeToSpawnNextRow = aStartTimeToSpawnNextRow;
@@ -54,5 +55,9 @@ public class GameManager {
 
     public int getScore() {
         return mScore;
+    }
+
+    public int getDelayToStartGame() {
+        return delayToStartGame;
     }
 }
