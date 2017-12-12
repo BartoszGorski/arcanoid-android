@@ -13,7 +13,6 @@ public class BallModel {
     private boolean isReleased = false;
 
     BallModel(float xPosition, float yPosition, int radius, int windowWidth, int windowHeight) {
-
         this.xPosition = xPosition;
         this.yPosition = yPosition;
         mRadius = radius;
@@ -22,7 +21,6 @@ public class BallModel {
     }
 
     boolean updatePosition() {
-
         xPosition += mVelocityX;
         yPosition += mVelocityY;
 
@@ -30,7 +28,6 @@ public class BallModel {
     }
 
     public boolean checkIntersections(FieldModel aFieldModel) {
-
         if (isIntersectiongWithWalls()) {
             return true;
         }
@@ -61,7 +58,6 @@ public class BallModel {
     }
 
     private boolean isIntersectingWithRectangle(FieldModel fieldModel) {
-
         int leftRect = fieldModel.getPosition().x;
         int topRect = fieldModel.getPosition().y;
         int rectWidth = fieldModel.getWidth();
@@ -69,10 +65,6 @@ public class BallModel {
 
         int circleDistanceX = Math.abs((int) (xPosition + mVelocityX) - (leftRect + rectWidth / 2));
         int circleDistanceY = Math.abs((int) (yPosition + mVelocityY) - (topRect + rectHeight / 2));
-
-        if (circleDistanceX >= mRadius + rectWidth || circleDistanceY >= mRadius + rectHeight) {
-            return false;
-        }
 
         if (circleDistanceX > (rectWidth / 2 + mRadius)) {
             return false;
@@ -118,7 +110,7 @@ public class BallModel {
 
     public void releaseBall() {
         int direction = (int) (Math.random() * 2);
-        if(direction == 0)
+        if (direction == 0)
             direction = -1;
 
         mVelocityX = 1.5f * direction;
