@@ -28,7 +28,8 @@ class Controller implements Runnable {
         mScoreTextView = aScoreTextView;
         mBestScoreTextView = aBestScoreTextView;
 
-        mGameManager = new GameManager(aContex, 10000, 3000, 400);
+        mGameManager.init(aContex, 10000, 3000, 400);
+        mGameManager = GameManager.getInstance();
 
         mScoreTextView.setText("Score: " + mGameManager.getScore());
         mBestScoreTextView.setText("Best Score: " + mGameManager.loadBestScore());
@@ -76,8 +77,10 @@ class Controller implements Runnable {
                 mHandler.post(new Runnable() {
                     @Override
                     public void run() {
-                        Update();
-                        Render();
+                        if (!mGameManager.isGameOver()) {
+                            Update();
+                            Render();
+                        }
                     }
                 });
             } catch (InterruptedException e) {
