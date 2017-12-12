@@ -46,7 +46,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
             Display display = getWindowManager().getDefaultDisplay();
             Point size = new Point();
             display.getSize(size);
-            mController = new Controller(new Handler(), painter, scoreTextView, bestScoreTextView, size);
+            mController = new Controller(new Handler(), getApplicationContext(), painter, scoreTextView, bestScoreTextView, size);
             Thread t = new Thread(mController);
             t.start();
         }

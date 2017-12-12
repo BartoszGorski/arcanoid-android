@@ -1,5 +1,6 @@
 package com.s219195.arcanoid;
 
+import android.content.Context;
 import android.graphics.Point;
 import android.os.Handler;
 import android.widget.TextView;
@@ -20,17 +21,17 @@ class Controller implements Runnable {
     private TextView mBestScoreTextView;
     private TextView mScoreTextView;
 
-    public Controller(Handler aHandler, Painter aPainter, TextView aScoreTextView,
+    public Controller(Handler aHandler, Context aContex, Painter aPainter, TextView aScoreTextView,
                       TextView aBestScoreTextView, Point defaultWindowSize) {
         mHandler = aHandler;
         mPainter = aPainter;
         mScoreTextView = aScoreTextView;
         mBestScoreTextView = aBestScoreTextView;
 
-        mGameManager = new GameManager(10000, 3000, 400);
+        mGameManager = new GameManager(aContex, 10000, 3000, 400);
 
         mScoreTextView.setText("Score: " + mGameManager.getScore());
-        mBestScoreTextView.setText("Best Score: " + 1234);
+        mBestScoreTextView.setText("Best Score: " + mGameManager.loadBestScore());
         mBallModel = new BallModel(
                 defaultWindowSize.x / 2,
                 defaultWindowSize.y - 100 - 12 - 1,
