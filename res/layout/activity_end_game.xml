@@ -51,4 +51,13 @@
         android:layout_centerHorizontal="true"
         android:layout_marginTop="25dp" />
 
+    <Button
+        android:id="@+id/restartButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/endGameButton"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="15dp"
+        android:text="Try Again" />
+
 </RelativeLayout>
