@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.s219195.arcanoid.EndGameActivity">
+
+    <TextView
+        android:id="@+id/end_game_your_score"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Your score:"
+        tools:layout_editor_absoluteX="157dp"
+        tools:layout_editor_absoluteY="110dp"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="95dp" />
+
+    <TextView
+        android:id="@+id/end_game_best_score"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignEnd="@+id/end_game_your_score"
+        android:layout_alignRight="@+id/end_game_your_score"
+        android:layout_below="@+id/end_game_your_score"
+        android:layout_marginTop="20dp"
+        android:text="Best Score:"
+        tools:layout_editor_absoluteX="157dp"
+        tools:layout_editor_absoluteY="143dp" />
+
+    <Button
+        android:id="@+id/endGameButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="End Game"
+        tools:layout_editor_absoluteX="145dp"
+        tools:layout_editor_absoluteY="271dp"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="43dp" />
+
+    <TextView
+        android:id="@+id/gameEndTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Game Over! Good luck next time!"
+        tools:layout_editor_absoluteX="90dp"
+        tools:layout_editor_absoluteY="50dp"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="25dp" />
+
+    <Button
+        android:id="@+id/restartButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/endGameButton"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="15dp"
+        android:text="Try Again" />
+
+</RelativeLayout>
